@@ -1,0 +1,28 @@
+services:
+  api:
+    image: ghcr.io/carbonneuron/carbon-files:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - carbonfiles-data:/app/data
+    environment:
+      - CarbonFiles__AdminKey=change-me-in-production
+      - CarbonFiles__DataDir=/app/data
+      - CarbonFiles__DbPath=/app/data/carbonfiles.db
+      - CarbonFiles__CorsOrigins=http://localhost:3000
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://api:8080
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - AUTH_COOKIE_SECRET=change-me-in-production
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  carbonfiles-data:
