@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LayoutDashboard, Key, FolderOpen, BarChart3 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -12,10 +13,7 @@ export function DashboardNav() {
   return (
     <nav className="border-b border-border bg-surface">
       <div className="mx-auto flex max-w-7xl items-center gap-1 px-4">
-        <Link
-          href="/dashboard"
-          className="mr-6 font-brand text-lg font-bold text-accent"
-        >
+        <Link href="/dashboard" className="mr-6 font-brand text-lg font-bold text-accent">
           clawd-files
         </Link>
         {navItems.map((item) => (
@@ -28,6 +26,9 @@ export function DashboardNav() {
             {item.label}
           </Link>
         ))}
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </div>
     </nav>
   );

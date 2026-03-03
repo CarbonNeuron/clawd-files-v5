@@ -28,8 +28,7 @@ export default async function BucketDetailPage({ params }: BucketDetailPageProps
   }
 
   const bucket: BucketDetailResponse = await res.json();
-  const isExpired =
-    bucket.expires_at && new Date(bucket.expires_at).getTime() < Date.now();
+  const isExpired = bucket.expires_at && new Date(bucket.expires_at).getTime() < Date.now();
 
   const files = bucket.files.map((f) => ({
     ...f,
@@ -52,21 +51,13 @@ export default async function BucketDetailPage({ params }: BucketDetailPageProps
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold">{bucket.name}</h1>
-            {bucket.description && (
-              <p className="mt-1 text-text-muted">{bucket.description}</p>
-            )}
+            {bucket.description && <p className="mt-1 text-text-muted">{bucket.description}</p>}
             <div className="mt-3 flex flex-wrap gap-3 text-sm text-text-muted">
               <span>Owner: {bucket.owner}</span>
-              <span>
-                Files: {Number(bucket.file_count ?? 0)}
-              </span>
-              <span>
-                Size: {formatBytes(Number(bucket.total_size ?? 0))}
-              </span>
+              <span>Files: {Number(bucket.file_count ?? 0)}</span>
+              <span>Size: {formatBytes(Number(bucket.total_size ?? 0))}</span>
               {bucket.created_at && (
-                <span>
-                  Created: {new Date(bucket.created_at).toLocaleDateString()}
-                </span>
+                <span>Created: {new Date(bucket.created_at).toLocaleDateString()}</span>
               )}
               {bucket.expires_at && (
                 <Badge variant={isExpired ? "danger" : "default"}>
@@ -86,9 +77,7 @@ export default async function BucketDetailPage({ params }: BucketDetailPageProps
       />
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold">
-          Files ({Number(bucket.file_count ?? 0)})
-        </h2>
+        <h2 className="mb-3 text-lg font-semibold">Files ({Number(bucket.file_count ?? 0)})</h2>
         {files.length === 0 ? (
           <p className="text-text-muted">No files in this bucket.</p>
         ) : (
@@ -96,8 +85,7 @@ export default async function BucketDetailPage({ params }: BucketDetailPageProps
         )}
         {bucket.has_more_files && (
           <p className="mt-2 text-sm text-text-muted">
-            Showing first {files.length} files. View the bucket directly for the
-            full list.
+            Showing first {files.length} files. View the bucket directly for the full list.
           </p>
         )}
       </div>

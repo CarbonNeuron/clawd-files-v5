@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const apiUrl = process.env.API_URL!;
     return NextResponse.redirect(
       `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath!)}/content`,
-      { status: 302 }
+      { status: 302 },
     );
   }
   return NextResponse.next();

@@ -19,9 +19,7 @@ export default async function KeysPage() {
     cache: "no-store",
   });
 
-  const keys: PaginatedResponseOfApiKeyListItem | null = res.ok
-    ? await res.json()
-    : null;
+  const keys: PaginatedResponseOfApiKeyListItem | null = res.ok ? await res.json() : null;
 
   return (
     <div>
@@ -55,14 +53,10 @@ export default async function KeysPage() {
                 </TableCell>
                 <TableCell className="font-medium">{key.name}</TableCell>
                 <TableCell className="hidden text-text-muted sm:table-cell">
-                  {key.created_at
-                    ? new Date(key.created_at).toLocaleDateString()
-                    : "-"}
+                  {key.created_at ? new Date(key.created_at).toLocaleDateString() : "-"}
                 </TableCell>
                 <TableCell className="hidden text-text-muted md:table-cell">
-                  {key.last_used_at
-                    ? new Date(key.last_used_at).toLocaleDateString()
-                    : "Never"}
+                  {key.last_used_at ? new Date(key.last_used_at).toLocaleDateString() : "Never"}
                 </TableCell>
                 <TableCell className="hidden text-text-muted lg:table-cell">
                   {Number(key.bucket_count ?? 0)}

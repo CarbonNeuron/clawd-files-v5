@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
 import { BucketHeader } from "@/components/bucket/bucket-header";
+import { ViewModeToggle } from "@/components/bucket/view-mode-toggle";
 import { LiveFileList } from "@/components/bucket/live-file-list";
 import { ReadmeSection } from "@/components/bucket/readme-section";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -52,8 +53,7 @@ export async function generateMetadata({
   return {
     title: bucket.name,
     description:
-      bucket.description ??
-      `${bucket.file_count} files, ${formatBytes(bucket.total_size)}`,
+      bucket.description ?? `${bucket.file_count} files, ${formatBytes(bucket.total_size)}`,
   };
 }
 
@@ -68,11 +68,7 @@ function ReadmeFallback() {
   );
 }
 
-export default async function BucketPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function BucketPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const bucket = await fetchBucket(id);
 
@@ -91,6 +87,10 @@ export default async function BucketPage({
         totalSize={bucket.total_size}
         expiresAt={bucket.expires_at}
       />
+
+      <div className="flex justify-end">
+        <ViewModeToggle />
+      </div>
 
       <LiveFileList
         bucketId={bucket.id}

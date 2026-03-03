@@ -41,21 +41,13 @@ export default async function StatsPage() {
           label="Total Buckets"
           value={Number(stats.total_buckets ?? 0)}
         />
-        <StatsCard
-          icon={FileText}
-          label="Total Files"
-          value={Number(stats.total_files ?? 0)}
-        />
+        <StatsCard icon={FileText} label="Total Files" value={Number(stats.total_files ?? 0)} />
         <StatsCard
           icon={HardDrive}
           label="Total Storage"
           value={formatBytes(Number(stats.total_size ?? 0))}
         />
-        <StatsCard
-          icon={Key}
-          label="Total API Keys"
-          value={Number(stats.total_keys ?? 0)}
-        />
+        <StatsCard icon={Key} label="Total API Keys" value={Number(stats.total_keys ?? 0)} />
         <StatsCard
           icon={Download}
           label="Total Downloads"
@@ -84,9 +76,7 @@ export default async function StatsPage() {
                   <TableCell className="text-text-muted">
                     {Number(owner.bucket_count ?? 0)}
                   </TableCell>
-                  <TableCell className="text-text-muted">
-                    {Number(owner.file_count ?? 0)}
-                  </TableCell>
+                  <TableCell className="text-text-muted">{Number(owner.file_count ?? 0)}</TableCell>
                   <TableCell className="text-text-muted">
                     {formatBytes(Number(owner.total_size ?? 0))}
                   </TableCell>

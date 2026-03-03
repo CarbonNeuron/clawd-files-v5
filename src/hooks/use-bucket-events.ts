@@ -31,14 +31,10 @@ export function useBucketEvents(bucketId: string, initialFiles: BucketFile[]) {
       if (id === bucketId) setFiles((prev) => [...prev, file]);
     });
     hub.on("FileDeleted", (id: string, path: string) => {
-      if (id === bucketId)
-        setFiles((prev) => prev.filter((f) => f.path !== path));
+      if (id === bucketId) setFiles((prev) => prev.filter((f) => f.path !== path));
     });
     hub.on("FileUpdated", (id: string, file: BucketFile) => {
-      if (id === bucketId)
-        setFiles((prev) =>
-          prev.map((f) => (f.path === file.path ? file : f)),
-        );
+      if (id === bucketId) setFiles((prev) => prev.map((f) => (f.path === file.path ? file : f)));
     });
 
     hub.start().then(() => hub.invoke("SubscribeToBucket", bucketId));

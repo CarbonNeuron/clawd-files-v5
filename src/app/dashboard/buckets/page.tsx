@@ -32,9 +32,7 @@ export default async function BucketsPage({ searchParams }: BucketsPageProps) {
     },
   );
 
-  const buckets: PaginatedResponseOfBucket | null = res.ok
-    ? await res.json()
-    : null;
+  const buckets: PaginatedResponseOfBucket | null = res.ok ? await res.json() : null;
 
   return (
     <div>
@@ -59,8 +57,7 @@ export default async function BucketsPage({ searchParams }: BucketsPageProps) {
             <TableBody>
               {buckets.items.map((bucket) => {
                 const isExpired =
-                  bucket.expires_at &&
-                  new Date(bucket.expires_at).getTime() < Date.now();
+                  bucket.expires_at && new Date(bucket.expires_at).getTime() < Date.now();
                 return (
                   <TableRow key={bucket.id}>
                     <TableCell>
@@ -83,9 +80,7 @@ export default async function BucketsPage({ searchParams }: BucketsPageProps) {
                     <TableCell className="hidden md:table-cell">
                       {bucket.expires_at ? (
                         <Badge variant={isExpired ? "danger" : "default"}>
-                          {isExpired
-                            ? "Expired"
-                            : formatExpiry(bucket.expires_at)}
+                          {isExpired ? "Expired" : formatExpiry(bucket.expires_at)}
                         </Badge>
                       ) : (
                         <span className="text-text-muted">Never</span>

@@ -33,7 +33,7 @@ async function fetchFileMetadata(bucketId: string, filePath: string): Promise<Fi
       {
         headers: { Accept: "application/json" },
         cache: "no-store",
-      }
+      },
     );
     if (!res.ok) return null;
     return (await res.json()) as FileMetadata;
@@ -46,7 +46,7 @@ async function fetchFileContent(bucketId: string, filePath: string): Promise<str
   try {
     const res = await fetch(
       `${process.env.API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
     if (!res.ok) return null;
     return await res.text();
@@ -63,22 +63,59 @@ function getLanguageFromName(name: string): string | undefined {
   const ext = name.split(".").pop()?.toLowerCase();
   if (!ext) return undefined;
   const map: Record<string, string> = {
-    ts: "typescript", tsx: "tsx", js: "javascript", jsx: "jsx",
-    py: "python", rb: "ruby", rs: "rust", go: "go",
-    java: "java", kt: "kotlin", swift: "swift",
-    c: "c", cpp: "cpp", h: "c", hpp: "cpp",
-    cs: "csharp", fs: "fsharp", hs: "haskell", ml: "ocaml",
-    ex: "elixir", exs: "elixir", clj: "clojure", scala: "scala",
-    zig: "zig", nim: "nim",
-    vue: "vue", svelte: "svelte", astro: "astro",
-    css: "css", scss: "scss", less: "less",
-    sql: "sql", graphql: "graphql", proto: "protobuf",
-    tf: "hcl", hcl: "hcl",
-    yaml: "yaml", yml: "yaml", toml: "toml",
-    ini: "ini", conf: "ini", cfg: "ini",
-    sh: "bash", bash: "bash", zsh: "zsh", fish: "fish",
-    ps1: "powershell", bat: "batch", cmd: "batch",
-    json: "json", xml: "xml", html: "html", md: "markdown",
+    ts: "typescript",
+    tsx: "tsx",
+    js: "javascript",
+    jsx: "jsx",
+    py: "python",
+    rb: "ruby",
+    rs: "rust",
+    go: "go",
+    java: "java",
+    kt: "kotlin",
+    swift: "swift",
+    c: "c",
+    cpp: "cpp",
+    h: "c",
+    hpp: "cpp",
+    cs: "csharp",
+    fs: "fsharp",
+    hs: "haskell",
+    ml: "ocaml",
+    ex: "elixir",
+    exs: "elixir",
+    clj: "clojure",
+    scala: "scala",
+    zig: "zig",
+    nim: "nim",
+    vue: "vue",
+    svelte: "svelte",
+    astro: "astro",
+    css: "css",
+    scss: "scss",
+    less: "less",
+    sql: "sql",
+    graphql: "graphql",
+    proto: "protobuf",
+    tf: "hcl",
+    hcl: "hcl",
+    yaml: "yaml",
+    yml: "yaml",
+    toml: "toml",
+    ini: "ini",
+    conf: "ini",
+    cfg: "ini",
+    sh: "bash",
+    bash: "bash",
+    zsh: "zsh",
+    fish: "fish",
+    ps1: "powershell",
+    bat: "batch",
+    cmd: "batch",
+    json: "json",
+    xml: "xml",
+    html: "html",
+    md: "markdown",
   };
   return map[ext];
 }
@@ -129,11 +166,7 @@ async function FilePreview({
     const content = await fetchFileContent(bucketId, filePath);
     if (content !== null) {
       return (
-        <MarkdownRenderer
-          content={content}
-          bucketId={bucketId}
-          basePath={getBasePath(filePath)}
-        />
+        <MarkdownRenderer content={content} bucketId={bucketId} basePath={getBasePath(filePath)} />
       );
     }
   }
@@ -142,12 +175,7 @@ async function FilePreview({
   if (isTextType(mimeType) || isCodeFile(metadata.name)) {
     const content = await fetchFileContent(bucketId, filePath);
     if (content !== null) {
-      return (
-        <CodeBlock
-          code={content}
-          language={getLanguageFromName(metadata.name)}
-        />
-      );
+      return <CodeBlock code={content} language={getLanguageFromName(metadata.name)} />;
     }
   }
 
@@ -193,11 +221,7 @@ async function FilePreview({
   if (mimeType === "application/pdf") {
     return (
       <div className="overflow-hidden rounded-lg border border-border">
-        <iframe
-          src={contentUrl}
-          className="h-[700px] w-full"
-          title={metadata.name}
-        />
+        <iframe src={contentUrl} className="h-[700px] w-full" title={metadata.name} />
       </div>
     );
   }
@@ -210,9 +234,7 @@ async function FilePreview({
         <p className="text-lg font-medium text-text">{metadata.name}</p>
         <p className="text-sm text-text-muted">{formatBytes(metadata.size)}</p>
       </div>
-      <p className="text-sm text-text-muted">
-        No preview available for this file type.
-      </p>
+      <p className="text-sm text-text-muted">No preview available for this file type.</p>
       <a
         href={`${contentUrl}?download=true`}
         className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-bg hover:bg-accent-2 transition-colors"
@@ -224,11 +246,7 @@ async function FilePreview({
   );
 }
 
-export default async function FileDetailPage({
-  params,
-}: {
-  params: Promise<PageParams>;
-}) {
+export default async function FileDetailPage({ params }: { params: Promise<PageParams> }) {
   const { id: bucketId, path: pathSegments } = await params;
   const filePath = pathSegments.join("/");
   const metadata = await fetchFileMetadata(bucketId, filePath);
@@ -258,9 +276,7 @@ export default async function FileDetailPage({
             <FileIcon mimeType={metadata.mime_type} size={24} />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-xl font-semibold text-text">
-              {metadata.name}
-            </h1>
+            <h1 className="truncate text-xl font-semibold text-text">{metadata.name}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-text-muted">
               <span>{formatBytes(metadata.size)}</span>
               <span className="text-border">|</span>
@@ -302,11 +318,7 @@ export default async function FileDetailPage({
 
       {/* Preview section */}
       <Suspense fallback={<FilePreviewSkeleton />}>
-        <FilePreview
-          bucketId={bucketId}
-          filePath={filePath}
-          metadata={metadata}
-        />
+        <FilePreview bucketId={bucketId} filePath={filePath} metadata={metadata} />
       </Suspense>
     </main>
   );

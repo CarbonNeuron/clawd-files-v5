@@ -17,14 +17,11 @@ export function useFileEvents(bucketId: string, filePath: string) {
 
     const hub = createFileHub(apiUrl);
 
-    hub.on(
-      "FileUpdated",
-      (id: string, file: { path: string; updated_at: string }) => {
-        if (id === bucketId && file.path === filePath) {
-          setState({ deleted: false, updatedAt: file.updated_at });
-        }
-      },
-    );
+    hub.on("FileUpdated", (id: string, file: { path: string; updated_at: string }) => {
+      if (id === bucketId && file.path === filePath) {
+        setState({ deleted: false, updatedAt: file.updated_at });
+      }
+    });
     hub.on("FileDeleted", (id: string, path: string) => {
       if (id === bucketId && path === filePath) {
         setState({ deleted: true });

@@ -13,11 +13,7 @@ interface EditBucketFormProps {
   initialDescription: string;
 }
 
-export function EditBucketForm({
-  bucketId,
-  initialName,
-  initialDescription,
-}: EditBucketFormProps) {
+export function EditBucketForm({ bucketId, initialName, initialDescription }: EditBucketFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
@@ -35,8 +31,7 @@ export function EditBucketForm({
     try {
       const body: Record<string, string | null> = {};
       if (name.trim() !== initialName) body.name = name.trim();
-      if (description.trim() !== initialDescription)
-        body.description = description.trim() || null;
+      if (description.trim() !== initialDescription) body.description = description.trim() || null;
       if (expiresIn.trim()) body.expires_in = expiresIn.trim();
 
       const res = await fetch(`/dashboard/buckets/${bucketId}/edit`, {
@@ -67,11 +62,7 @@ export function EditBucketForm({
             <label htmlFor="edit-name" className="mb-1 block text-sm text-text-muted">
               Name
             </label>
-            <Input
-              id="edit-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Input id="edit-name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-desc" className="mb-1 block text-sm text-text-muted">

@@ -37,6 +37,7 @@ git init && git add -A && git commit -m "chore: initialize Next.js 16 project"
 ### Task 2: Configure TypeScript strict mode and project settings
 
 **Files:**
+
 - Modify: `tsconfig.json`
 - Modify: `next.config.ts`
 - Create: `.env.local`
@@ -61,9 +62,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
-    remotePatterns: [
-      { protocol: "http", hostname: "localhost" },
-    ],
+    remotePatterns: [{ protocol: "http", hostname: "localhost" }],
   },
 };
 
@@ -99,6 +98,7 @@ npm install -D @hey-api/openapi-ts prettier
 ### Task 4: Configure fonts in root layout
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 
 ```tsx
@@ -129,6 +129,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ### Task 5: Set up Tailwind CSS v4 design tokens
 
 **Files:**
+
 - Modify: `src/app/globals.css`
 
 ```css
@@ -175,6 +176,7 @@ body {
 ### Task 6: Generate typed API client
 
 **Files:**
+
 - Create: `openapi-ts.config.ts` (project root)
 - Generated: `src/lib/api/generated/` (auto-generated)
 - Create: `src/lib/api/client.ts`
@@ -183,16 +185,14 @@ body {
 **Step 1: Create openapi-ts config**
 
 `openapi-ts.config.ts`:
+
 ```typescript
 import { defineConfig } from "@hey-api/openapi-ts";
 
 export default defineConfig({
   input: "http://localhost:5239/openapi/v1.json",
   output: { path: "src/lib/api/generated", format: "prettier" },
-  plugins: [
-    "@hey-api/typescript",
-    { name: "@hey-api/sdk", asClass: false, operationId: true },
-  ],
+  plugins: ["@hey-api/typescript", { name: "@hey-api/sdk", asClass: false, operationId: true }],
 });
 ```
 
@@ -257,6 +257,7 @@ export async function getServerClient() {
 ### Task 7: Auth cookie helpers
 
 **Files:**
+
 - Create: `src/lib/auth/cookies.ts`
 
 ```typescript
@@ -290,6 +291,7 @@ export async function clearAuthToken() {
 ### Task 8: Auth set-token route handler
 
 **Files:**
+
 - Create: `src/app/auth/set-token/route.ts`
 
 ```typescript
@@ -316,6 +318,7 @@ export async function POST(request: NextRequest) {
 ### Task 9: Auth validation helper
 
 **Files:**
+
 - Create: `src/lib/auth/validate.ts`
 
 ```typescript
@@ -346,6 +349,7 @@ export async function validateAuth(): Promise<AuthState> {
 ### Task 10: Content negotiation middleware
 
 **Files:**
+
 - Create: `src/middleware.ts`
 
 ```typescript
@@ -360,7 +364,7 @@ export function middleware(request: NextRequest) {
     const apiUrl = process.env.API_URL!;
     return NextResponse.redirect(
       `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`,
-      { status: 302 }
+      { status: 302 },
     );
   }
   return NextResponse.next();
@@ -378,6 +382,7 @@ export const config = { matcher: ["/buckets/:id/files/:path*"] };
 ### Task 11: Core UI components
 
 **Files to create:**
+
 - `src/components/ui/button.tsx` — Button with variants: primary, secondary, danger, ghost
 - `src/components/ui/card.tsx` — Card, CardHeader, CardContent
 - `src/components/ui/badge.tsx` — Badge with variants: default, success, danger, accent
@@ -391,6 +396,7 @@ All use Tailwind with design tokens. No UI framework. See design doc for exact i
 ### Task 12: FileIcon component
 
 **Files:**
+
 - Create: `src/components/file/file-icon.tsx`
 
 Maps MIME types to lucide-react icons with color coding. Handles: image, video, audio, pdf, archive, code, text, folder, and fallback.
@@ -398,6 +404,7 @@ Maps MIME types to lucide-react icons with color coding. Handles: image, video, 
 ### Task 13: Utility functions
 
 **Files:**
+
 - Create: `src/lib/utils.ts`
 
 ```typescript
@@ -420,9 +427,16 @@ export function formatExpiry(expiresAt: string): string {
 
 export function isTextType(mimeType: string): boolean {
   if (mimeType.startsWith("text/")) return true;
-  return ["application/json", "application/javascript", "application/typescript",
-    "application/xml", "application/yaml", "application/toml",
-    "application/x-sh", "application/x-python"].includes(mimeType);
+  return [
+    "application/json",
+    "application/javascript",
+    "application/typescript",
+    "application/xml",
+    "application/yaml",
+    "application/toml",
+    "application/x-sh",
+    "application/x-python",
+  ].includes(mimeType);
 }
 ```
 
@@ -435,6 +449,7 @@ export function isTextType(mimeType: string): boolean {
 ### Task 14: Landing page with token handler
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 - Create: `src/app/buckets/route.ts` (redirect helper for form)
 - Create: `src/components/auth/token-handler.tsx`
@@ -454,6 +469,7 @@ The form submits to `/buckets?id=...` which redirects to `/buckets/{id}`.
 ### Task 15: Bucket page with streaming
 
 **Files:**
+
 - Create: `src/app/buckets/[id]/page.tsx`
 - Create: `src/app/buckets/[id]/loading.tsx`
 - Create: `src/components/bucket/bucket-header.tsx`
@@ -484,6 +500,7 @@ The form submits to `/buckets?id=...` which redirects to `/buckets/{id}`.
 ### Task 16: File detail page with preview
 
 **Files:**
+
 - Create: `src/app/buckets/[id]/files/[...path]/page.tsx`
 - Create: `src/app/buckets/[id]/files/[...path]/loading.tsx`
 - Create: `src/components/file/code-block.tsx`
@@ -492,11 +509,13 @@ The form submits to `/buckets?id=...` which redirects to `/buckets/{id}`.
 **CodeBlock:** Server component — first 50 lines as plain monospace with line numbers. "Show all" stub at bottom.
 
 **MarkdownRenderer:** Server component — react-markdown + remark-gfm. Custom components:
+
 - `a`: Rewrite relative links to `/buckets/{id}/files/{resolved}`
 - `img`: Rewrite relative images to API content URL
 - `code`: Fenced blocks get monospace styling
 
 **File detail page:** Server component with Suspense. Fetches file metadata, shows:
+
 - Header: icon, name, size, MIME badge, short URL, download button
 - curl snippet: `curl -L {shortUrl} -o {filename}`
 - Preview by MIME type: markdown, text/code, image, video, audio, PDF, fallback download
@@ -510,6 +529,7 @@ The form submits to `/buckets?id=...` which redirects to `/buckets/{id}`.
 ### Task 17: Dashboard layout with auth guard and nav
 
 **Files:**
+
 - Create: `src/app/dashboard/layout.tsx`
 - Create: `src/components/dashboard/dashboard-nav.tsx`
 
@@ -520,6 +540,7 @@ Layout: Server-side auth check — if not authenticated, redirect to `/?error=se
 ### Task 18: Dashboard overview page
 
 **Files:**
+
 - Create: `src/app/dashboard/page.tsx`
 - Create: `src/components/dashboard/stats-card.tsx`
 
@@ -528,6 +549,7 @@ Fetches `GET /api/stats` with auth token. Shows grid of StatsCards: Buckets, Fil
 ### Task 19: API Key management page
 
 **Files:**
+
 - Create: `src/app/dashboard/keys/page.tsx`
 - Create: `src/components/dashboard/create-key-form.tsx` (client component)
 - Create: `src/components/dashboard/delete-key-button.tsx` (client component)
@@ -541,6 +563,7 @@ DeleteKeyButton: Client component — confirmation dialog, DELETE to API.
 ### Task 20: Bucket management pages
 
 **Files:**
+
 - Create: `src/app/dashboard/buckets/page.tsx`
 - Create: `src/app/dashboard/buckets/[id]/page.tsx`
 - Create: `src/components/dashboard/create-bucket-form.tsx` (client component)
@@ -552,6 +575,7 @@ Bucket detail: Server component. Edit form (name, description, expiry). File lis
 ### Task 21: Stats page
 
 **Files:**
+
 - Create: `src/app/dashboard/stats/page.tsx`
 
 Server component fetching `GET /api/stats`. System totals + storage by owner breakdown table.
@@ -563,11 +587,13 @@ Server component fetching `GET /api/stats`. System totals + storage by owner bre
 ### Task 22: SignalR client and hooks
 
 **Files:**
+
 - Create: `src/lib/signalr/client.ts`
 - Create: `src/hooks/use-bucket-events.ts`
 - Create: `src/hooks/use-file-events.ts`
 
 **SignalR client:**
+
 ```typescript
 import * as signalR from "@microsoft/signalr";
 
@@ -586,6 +612,7 @@ export function createFileHub(baseUrl: string) {
 ### Task 23: Wire SignalR into bucket and file pages
 
 Create wrapper client components that:
+
 - Take server-rendered initial data as props
 - Use the hooks to subscribe to real-time updates
 - Render the same FileList/FileGrid with live data
@@ -597,9 +624,11 @@ Create wrapper client components that:
 ### Task 24: Upload zone component
 
 **Files:**
+
 - Create: `src/components/file/upload-zone.tsx` (client component)
 
 Features:
+
 - Drag and drop zone with visual feedback (border highlight on drag over)
 - Hidden file input for click-to-browse
 - Per-file progress tracked via XMLHttpRequest or fetch with ReadableStream
@@ -612,6 +641,7 @@ Features:
 ### Task 25: Upload token page
 
 **Files:**
+
 - Create: `src/app/buckets/[id]/upload/page.tsx`
 
 Server component validates upload token from `?token=` search param against the API. Shows UploadZone if valid, error if invalid. No file listing, no admin UI.
@@ -623,6 +653,7 @@ Server component validates upload token from `?token=` search param against the 
 ### Task 26: Cookie-based preferences
 
 **Files:**
+
 - Create: `src/hooks/use-preferences.ts`
 - Create: `src/components/ui/theme-toggle.tsx` (client component)
 - Create: `src/components/bucket/view-mode-toggle.tsx` (client component)
@@ -640,6 +671,7 @@ ViewModeToggle: Reads cookie, sets cookie, triggers router.refresh() to re-rende
 ### Task 27: Dockerfile and docker-compose
 
 **Files:**
+
 - Create: `Dockerfile`
 - Create: `.dockerignore`
 - Create: `docker-compose.yml`
@@ -651,6 +683,7 @@ docker-compose.yml: carbon-files API + frontend, shared network.
 ### Task 28: GitHub Actions CI
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 Jobs: lint (prettier), typecheck (tsc), build (next build), docker (build + push to GHCR on main).
@@ -674,6 +707,7 @@ Install @playwright/test. Create playwright.config.ts. Write smoke test for land
 ### Task 31: Short URL fallback route
 
 **Files:**
+
 - Create: `src/app/s/[code]/route.ts`
 
 Redirects to API's `/s/{code}` endpoint.

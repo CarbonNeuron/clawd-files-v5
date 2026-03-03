@@ -26,31 +26,15 @@ export default async function DashboardPage() {
     <div>
       <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <StatsCard
-          icon={FolderOpen}
-          label="Buckets"
-          value={Number(stats.total_buckets ?? 0)}
-        />
-        <StatsCard
-          icon={FileText}
-          label="Files"
-          value={Number(stats.total_files ?? 0)}
-        />
+        <StatsCard icon={FolderOpen} label="Buckets" value={Number(stats.total_buckets ?? 0)} />
+        <StatsCard icon={FileText} label="Files" value={Number(stats.total_files ?? 0)} />
         <StatsCard
           icon={HardDrive}
           label="Storage"
           value={formatBytes(Number(stats.total_size ?? 0))}
         />
-        <StatsCard
-          icon={Key}
-          label="API Keys"
-          value={Number(stats.total_keys ?? 0)}
-        />
-        <StatsCard
-          icon={Download}
-          label="Downloads"
-          value={Number(stats.total_downloads ?? 0)}
-        />
+        <StatsCard icon={Key} label="API Keys" value={Number(stats.total_keys ?? 0)} />
+        <StatsCard icon={Download} label="Downloads" value={Number(stats.total_downloads ?? 0)} />
       </div>
     </div>
   );

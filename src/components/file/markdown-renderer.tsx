@@ -30,23 +30,43 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
 
   const components: Components = {
     a: ({ href, children, ...props }) => {
-      if (href && !href.startsWith("http://") && !href.startsWith("https://") && !href.startsWith("#")) {
+      if (
+        href &&
+        !href.startsWith("http://") &&
+        !href.startsWith("https://") &&
+        !href.startsWith("#")
+      ) {
         const resolved = resolvePath(href, basePath);
         return (
-          <a href={`/buckets/${bucketId}/files/${resolved}`} className="text-accent hover:underline" {...props}>
+          <a
+            href={`/buckets/${bucketId}/files/${resolved}`}
+            className="text-accent hover:underline"
+            {...props}
+          >
             {children}
           </a>
         );
       }
       return (
-        <a href={href} className="text-accent hover:underline" target="_blank" rel="noopener noreferrer" {...props}>
+        <a
+          href={href}
+          className="text-accent hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+          {...props}
+        >
           {children}
         </a>
       );
     },
     img: ({ src, alt, ...props }) => {
       let imgSrc: string | undefined = typeof src === "string" ? src : undefined;
-      if (imgSrc && !imgSrc.startsWith("http://") && !imgSrc.startsWith("https://") && !imgSrc.startsWith("data:")) {
+      if (
+        imgSrc &&
+        !imgSrc.startsWith("http://") &&
+        !imgSrc.startsWith("https://") &&
+        !imgSrc.startsWith("data:")
+      ) {
         const resolved = resolvePath(imgSrc, basePath);
         imgSrc = `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(resolved)}/content`;
       }
@@ -57,13 +77,19 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
       const isInline = !className;
       if (isInline) {
         return (
-          <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-accent" {...props}>
+          <code
+            className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-accent"
+            {...props}
+          >
             {children}
           </code>
         );
       }
       return (
-        <code className={`block overflow-x-auto rounded-lg bg-surface p-4 font-mono text-sm ${className ?? ""}`} {...props}>
+        <code
+          className={`block overflow-x-auto rounded-lg bg-surface p-4 font-mono text-sm ${className ?? ""}`}
+          {...props}
+        >
           {children}
         </code>
       );

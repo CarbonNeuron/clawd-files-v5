@@ -17,7 +17,14 @@ export function formatExpiry(expiresAt: string): string {
 
 export function isTextType(mimeType: string): boolean {
   if (mimeType.startsWith("text/")) return true;
-  return ["application/json", "application/javascript", "application/typescript",
-    "application/xml", "application/yaml", "application/toml",
-    "application/x-sh", "application/x-python"].includes(mimeType);
+  return [
+    "application/json",
+    "application/javascript",
+    "application/typescript",
+    "application/xml",
+    "application/yaml",
+    "application/toml",
+    "application/x-sh",
+    "application/x-python",
+  ].includes(mimeType);
 }

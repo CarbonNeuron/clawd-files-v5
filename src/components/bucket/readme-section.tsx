@@ -17,15 +17,13 @@ interface ReadmeSectionProps {
 }
 
 export async function ReadmeSection({ bucketId, files }: ReadmeSectionProps) {
-  const readmeFile = files.find(
-    (f) => f.name.toLowerCase() === "readme.md"
-  );
+  const readmeFile = files.find((f) => f.name.toLowerCase() === "readme.md");
 
   if (!readmeFile) return null;
 
   const apiUrl = process.env.API_URL;
   const res = await fetch(
-    `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(readmeFile.path)}/content`
+    `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(readmeFile.path)}/content`,
   );
 
   if (!res.ok) return null;

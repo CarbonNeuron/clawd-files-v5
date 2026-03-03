@@ -22,7 +22,10 @@ export function Pagination({ total, limit, offset, baseHref }: PaginationProps) 
   return (
     <nav className="flex items-center justify-center gap-2 py-4" aria-label="Pagination">
       {hasPrev ? (
-        <Link href={`${baseHref}${separator}offset=${prevOffset}&limit=${limit}`} className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-2">
+        <Link
+          href={`${baseHref}${separator}offset=${prevOffset}&limit=${limit}`}
+          className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-2"
+        >
           <ChevronLeft size={14} /> Previous
         </Link>
       ) : (
@@ -30,9 +33,14 @@ export function Pagination({ total, limit, offset, baseHref }: PaginationProps) 
           <ChevronLeft size={14} /> Previous
         </span>
       )}
-      <span className="text-sm text-text-muted">Page {currentPage} of {totalPages}</span>
+      <span className="text-sm text-text-muted">
+        Page {currentPage} of {totalPages}
+      </span>
       {hasNext ? (
-        <Link href={`${baseHref}${separator}offset=${nextOffset}&limit=${limit}`} className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-2">
+        <Link
+          href={`${baseHref}${separator}offset=${nextOffset}&limit=${limit}`}
+          className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-surface-2"
+        >
           Next <ChevronRight size={14} />
         </Link>
       ) : (

@@ -19,11 +19,7 @@ interface LiveFileListProps {
   viewMode: "list" | "grid";
 }
 
-export function LiveFileList({
-  bucketId,
-  initialFiles,
-  viewMode,
-}: LiveFileListProps) {
+export function LiveFileList({ bucketId, initialFiles, viewMode }: LiveFileListProps) {
   const files = useBucketEvents(bucketId, initialFiles);
 
   if (viewMode === "grid") {

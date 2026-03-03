@@ -9,6 +9,6 @@ export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputE
         {...props}
       />
     );
-  }
+  },
 );
 Input.displayName = "Input";

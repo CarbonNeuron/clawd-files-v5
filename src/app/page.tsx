@@ -23,7 +23,9 @@ export default async function LandingPage() {
         </div>
         <form action="/buckets" className="space-y-4">
           <div>
-            <label htmlFor="bucket-id" className="sr-only">Bucket ID</label>
+            <label htmlFor="bucket-id" className="sr-only">
+              Bucket ID
+            </label>
             <Input
               id="bucket-id"
               name="id"

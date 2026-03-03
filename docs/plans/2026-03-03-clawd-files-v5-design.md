@@ -27,18 +27,18 @@ Cookie-based JWT auth. No login page — admin generates a dashboard JWT shared 
 
 ## Routes
 
-| Route | Purpose | Auth |
-|-------|---------|------|
-| `/` | Landing — bucket ID input or dashboard redirect | None |
-| `/buckets/[id]` | Public bucket view | None |
-| `/buckets/[id]/files/[...path]` | File detail + content negotiation | None |
-| `/buckets/[id]/upload` | Upload token page | Upload token |
-| `/s/[code]` | Short URL redirect | None |
-| `/dashboard` | Admin dashboard home | Dashboard JWT |
-| `/dashboard/keys` | API key management | Dashboard JWT |
-| `/dashboard/buckets` | All buckets | Dashboard JWT |
-| `/dashboard/buckets/[id]` | Bucket detail + file management | Dashboard JWT |
-| `/dashboard/stats` | System statistics | Dashboard JWT |
+| Route                           | Purpose                                         | Auth          |
+| ------------------------------- | ----------------------------------------------- | ------------- |
+| `/`                             | Landing — bucket ID input or dashboard redirect | None          |
+| `/buckets/[id]`                 | Public bucket view                              | None          |
+| `/buckets/[id]/files/[...path]` | File detail + content negotiation               | None          |
+| `/buckets/[id]/upload`          | Upload token page                               | Upload token  |
+| `/s/[code]`                     | Short URL redirect                              | None          |
+| `/dashboard`                    | Admin dashboard home                            | Dashboard JWT |
+| `/dashboard/keys`               | API key management                              | Dashboard JWT |
+| `/dashboard/buckets`            | All buckets                                     | Dashboard JWT |
+| `/dashboard/buckets/[id]`       | Bucket detail + file management                 | Dashboard JWT |
+| `/dashboard/stats`              | System statistics                               | Dashboard JWT |
 
 ## Component Architecture
 
@@ -68,11 +68,11 @@ Each route segment has `loading.tsx` skeletons. Nested suspense boundaries strea
 
 ### Cookie Preferences
 
-| Cookie | Values | Default |
-|--------|--------|---------|
-| `cf-view-mode` | `list` / `grid` | `list` |
-| `cf-syntax-highlight` | `true` / `false` | `true` |
-| `cf-theme` | `dark` / `light` | `dark` |
+| Cookie                | Values           | Default |
+| --------------------- | ---------------- | ------- |
+| `cf-view-mode`        | `list` / `grid`  | `list`  |
+| `cf-syntax-highlight` | `true` / `false` | `true`  |
+| `cf-theme`            | `dark` / `light` | `dark`  |
 
 Read server-side for correct first paint. No flash or hydration mismatch.
 
@@ -86,14 +86,14 @@ Read server-side for correct first paint. No flash or hydration mismatch.
 
 ## File Previews
 
-| MIME Type | Preview Strategy |
-|-----------|-----------------|
-| Text/code | Two-phase: SSR plain (50 lines) → client syntax highlight (shiki) |
-| Images | `next/image` with explicit dimensions, blur placeholder |
-| Video/audio | Native HTML5 player, `preload="metadata"` |
-| PDF | `<iframe>` with fixed dimensions |
-| Markdown | `react-markdown` + `rehype-shiki` + relative link/image rewriting |
-| Other | Download button with file size |
+| MIME Type   | Preview Strategy                                                  |
+| ----------- | ----------------------------------------------------------------- |
+| Text/code   | Two-phase: SSR plain (50 lines) → client syntax highlight (shiki) |
+| Images      | `next/image` with explicit dimensions, blur placeholder           |
+| Video/audio | Native HTML5 player, `preload="metadata"`                         |
+| PDF         | `<iframe>` with fixed dimensions                                  |
+| Markdown    | `react-markdown` + `rehype-shiki` + relative link/image rewriting |
+| Other       | Download button with file size                                    |
 
 ## Content Negotiation
 
