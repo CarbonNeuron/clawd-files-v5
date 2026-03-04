@@ -54,7 +54,7 @@ function ImageThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry 
       src={src}
       alt={file.name}
       loading="lazy"
-      className="h-full w-full object-cover"
+      className="absolute inset-0 h-full w-full object-cover"
       onError={() => setFailed(true)}
     />
   );

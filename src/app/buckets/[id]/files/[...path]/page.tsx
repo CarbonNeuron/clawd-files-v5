@@ -180,7 +180,7 @@ async function FilePreview({
   // Images
   if (type === "image") {
     return (
-      <div className="flex justify-center rounded-lg border border-border bg-surface p-4">
+      <div className="flex min-h-48 justify-center rounded-lg border border-border bg-surface p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={contentUrl}
