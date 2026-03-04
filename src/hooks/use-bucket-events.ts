@@ -26,27 +26,37 @@ export function useBucketEvents(bucketId: string, initialFiles: BucketFile[]) {
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     if (!origin) return;
 
-    const hub = createFileHub(origin);
+    let stopped = false;
 
-    hub.on("FileCreated", (id: string, file: BucketFile) => {
-      if (id === bucketId) setFiles((prev) => [...prev, file]);
-    });
-    hub.on("FileDeleted", (id: string, path: string) => {
-      if (id === bucketId) setFiles((prev) => prev.filter((f) => f.path !== path));
-    });
-    hub.on("FileUpdated", (id: string, file: BucketFile) => {
-      if (id === bucketId) setFiles((prev) => prev.map((f) => (f.path === file.path ? file : f)));
-    });
+    createFileHub(origin).then((hub) => {
+      if (stopped) return;
 
-    hub
-      .start()
-      .then(() => hub.invoke("SubscribeToBucket", bucketId))
-      .catch(() => {
-        // SignalR connection failed — fall back to static file list
+      hub.on("FileCreated", (id: string, file: BucketFile) => {
+        if (id === bucketId) setFiles((prev) => [...prev, file]);
+      });
+      hub.on("FileDeleted", (id: string, path: string) => {
+        if (id === bucketId) setFiles((prev) => prev.filter((f) => f.path !== path));
+      });
+      hub.on("FileUpdated", (id: string, file: BucketFile) => {
+        if (id === bucketId) setFiles((prev) => prev.map((f) => (f.path === file.path ? file : f)));
       });
 
+      hub
+        .start()
+        .then(() => hub.invoke("SubscribeToBucket", bucketId))
+        .catch(() => {
+          // SignalR connection failed — fall back to static file list
+        });
+
+      cleanup = () => {
+        hub.stop().catch(() => {});
+      };
+    });
+
+    let cleanup = () => {};
     return () => {
-      hub.stop().catch(() => {});
+      stopped = true;
+      cleanup();
     };
   }, [bucketId]);
 
