@@ -25,6 +25,14 @@ const CODE_EXTENSIONS =
 
 type PageParams = { id: string; path: string[] };
 
+/** Next.js may leave multi-byte percent-encoding intact in catch-all params. */
+function decodePath(segments: string[]): string {
+  return segments.map((s) => {
+    try { return decodeURIComponent(s); }
+    catch { return s; }
+  }).join("/");
+}
+
 async function fetchFileMetadata(bucketId: string, filePath: string): Promise<FileMetadata | null> {
   try {
     const res = await fetch(
@@ -131,7 +139,7 @@ export async function generateMetadata({
   params: Promise<PageParams>;
 }): Promise<Metadata> {
   const { id: bucketId, path: pathSegments } = await params;
-  const filePath = pathSegments.join("/");
+  const filePath = decodePath(pathSegments);
   const meta = await fetchFileMetadata(bucketId, filePath);
   if (!meta) {
     return { title: "File Not Found" };
@@ -243,7 +251,7 @@ async function FilePreview({
 
 export default async function FileDetailPage({ params }: { params: Promise<PageParams> }) {
   const { id: bucketId, path: pathSegments } = await params;
-  const filePath = pathSegments.join("/");
+  const filePath = decodePath(pathSegments);
   const parentPath = getBasePath(filePath);
   const metadata = await fetchFileMetadata(bucketId, filePath);
 
