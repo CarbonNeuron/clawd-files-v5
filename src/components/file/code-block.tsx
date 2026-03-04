@@ -1,4 +1,5 @@
 import { codeToHtml } from "shiki";
+import { CodeViewer } from "./code-viewer";
 
 interface CodeBlockProps {
   code: string;
@@ -6,10 +7,25 @@ interface CodeBlockProps {
   maxLines?: number;
 }
 
+function formatContent(code: string, language?: string): string {
+  if (language === "json") {
+    try {
+      return JSON.stringify(JSON.parse(code), null, 2);
+    } catch {
+      return code;
+    }
+  }
+  return code;
+}
+
 export async function CodeBlock({ code, language, maxLines = 50 }: CodeBlockProps) {
-  const lines = code.split("\n");
+  const formatted = formatContent(code, language);
+  const lines = formatted.split("\n");
   const truncated = lines.slice(0, maxLines).join("\n");
-  const hasMore = lines.length > maxLines;
+  const truncatedCount = lines.length > maxLines ? lines.length - maxLines : 0;
+
+  const rawLines = code.split("\n");
+  const rawTruncated = rawLines.slice(0, maxLines).join("\n");
 
   const html = await codeToHtml(truncated, {
     lang: language ?? "text",
@@ -17,16 +33,6 @@ export async function CodeBlock({ code, language, maxLines = 50 }: CodeBlockProp
   });
 
   return (
-    <div className="rounded-lg border border-border bg-surface">
-      <div
-        className="[&_pre]:!bg-transparent [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:text-sm [&_pre]:leading-relaxed [&_code]:font-mono"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-      {hasMore && (
-        <div className="border-t border-border bg-surface-2 px-4 py-2 text-center text-sm text-text-muted">
-          {lines.length - maxLines} more lines
-        </div>
-      )}
-    </div>
+    <CodeViewer highlightedHtml={html} rawContent={rawTruncated} truncatedCount={truncatedCount} />
   );
 }
