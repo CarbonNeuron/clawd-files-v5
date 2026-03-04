@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/file/code-block";
 import { MarkdownRenderer } from "@/components/file/markdown-renderer";
 import { FileEventListener } from "@/components/file/file-event-listener";
 import { Badge } from "@/components/ui/badge";
-import { formatBytes, isTextType } from "@/lib/utils";
+import { encodeFilePath, formatBytes, isTextType } from "@/lib/utils";
 
 interface FileMetadata {
   path: string;
@@ -28,7 +28,7 @@ type PageParams = { id: string; path: string[] };
 async function fetchFileMetadata(bucketId: string, filePath: string): Promise<FileMetadata | null> {
   try {
     const res = await fetch(
-      `${process.env.API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}`,
+      `${process.env.API_URL}/api/buckets/${bucketId}/files/${encodeFilePath(filePath)}`,
       {
         headers: { Accept: "application/json" },
         cache: "no-store",
@@ -44,7 +44,7 @@ async function fetchFileMetadata(bucketId: string, filePath: string): Promise<Fi
 async function fetchFileContent(bucketId: string, filePath: string): Promise<string | null> {
   try {
     const res = await fetch(
-      `${process.env.API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`,
+      `${process.env.API_URL}/api/buckets/${bucketId}/files/${encodeFilePath(filePath)}/content`,
       { cache: "no-store" },
     );
     if (!res.ok) return null;
@@ -152,7 +152,7 @@ async function FilePreview({
   metadata: FileMetadata;
 }) {
   const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const contentUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`;
+  const contentUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeFilePath(filePath)}/content`;
   const mimeType = metadata.mime_type;
   const [type] = mimeType.split("/");
 
@@ -244,6 +244,7 @@ async function FilePreview({
 export default async function FileDetailPage({ params }: { params: Promise<PageParams> }) {
   const { id: bucketId, path: pathSegments } = await params;
   const filePath = pathSegments.join("/");
+  const parentPath = getBasePath(filePath);
   const metadata = await fetchFileMetadata(bucketId, filePath);
 
   if (!metadata) {
@@ -251,18 +252,18 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
   }
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const downloadUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content?download=true`;
+  const downloadUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeFilePath(filePath)}/content?download=true`;
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">
       <FileEventListener bucketId={bucketId} filePath={filePath} />
       {/* Back link */}
       <Link
-        href={`/buckets/${bucketId}`}
+        href={parentPath ? `/buckets/${bucketId}?path=${encodeURIComponent(parentPath)}` : `/buckets/${bucketId}`}
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors"
       >
         <ArrowLeft size={14} />
-        Back to bucket
+        {parentPath ? `Back to ${parentPath.split("/").pop()}` : "Back to bucket"}
       </Link>
 
       {/* File metadata header */}

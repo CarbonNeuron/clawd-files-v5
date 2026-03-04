@@ -55,8 +55,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function BucketPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function BucketPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ path?: string }>;
+}) {
   const { id } = await params;
+  const { path: currentPath } = await searchParams;
   const bucket = await fetchBucket(id);
 
   if (!bucket) notFound();
@@ -83,6 +90,7 @@ export default async function BucketPage({ params }: { params: Promise<{ id: str
         bucketId={bucket.id}
         initialFiles={bucket.files}
         viewMode={viewMode === "grid" ? "grid" : "list"}
+        currentPath={currentPath ?? ""}
       />
 
       <ReadmeSection bucketId={bucket.id} files={bucket.files} />

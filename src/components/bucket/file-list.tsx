@@ -23,9 +23,11 @@ interface FileEntry {
 interface FileListProps {
   bucketId: string;
   files: FileEntry[];
+  folders?: string[];
+  currentPath?: string;
 }
 
-export function FileList({ bucketId, files }: FileListProps) {
+export function FileList({ bucketId, files, folders = [], currentPath = "" }: FileListProps) {
   return (
     <Table>
       <TableHeader>
@@ -38,6 +40,27 @@ export function FileList({ bucketId, files }: FileListProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
+        {folders.map((folder) => {
+          const folderPath = currentPath ? `${currentPath}/${folder}` : folder;
+          return (
+            <TableRow key={`folder:${folder}`}>
+              <TableCell>
+                <FileIcon mimeType="" isDirectory size={16} />
+              </TableCell>
+              <TableCell>
+                <Link
+                  href={`/buckets/${bucketId}?path=${encodeURIComponent(folderPath)}`}
+                  className="text-link hover:underline truncate block font-medium"
+                >
+                  {folder}
+                </Link>
+              </TableCell>
+              <TableCell className="text-text-muted">&mdash;</TableCell>
+              <TableCell className="text-text-muted hidden sm:table-cell">Folder</TableCell>
+              <TableCell className="text-text-muted hidden md:table-cell">&mdash;</TableCell>
+            </TableRow>
+          );
+        })}
         {files.map((file) => (
           <TableRow key={file.path}>
             <TableCell>

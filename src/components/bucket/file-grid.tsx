@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FileIcon } from "@/components/file/file-icon";
-import { formatBytes, isTextType } from "@/lib/utils";
+import { encodeFilePath, formatBytes, isTextType } from "@/lib/utils";
 import { Play } from "lucide-react";
 
 interface FileEntry {
@@ -19,6 +19,8 @@ interface FileEntry {
 interface FileGridProps {
   bucketId: string;
   files: FileEntry[];
+  folders?: string[];
+  currentPath?: string;
 }
 
 const CODE_EXTENSIONS =
@@ -38,7 +40,7 @@ function isCodeOrText(mime: string | undefined, name: string) {
 
 function ImageThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry }) {
   const [failed, setFailed] = useState(false);
-  const src = `${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(file.path)}/content`;
+  const src = `${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${bucketId}/files/${encodeFilePath(file.path)}/content`;
 
   if (failed) {
     return (
@@ -87,9 +89,27 @@ function CodePreview({ file }: { file: FileEntry }) {
   );
 }
 
-export function FileGrid({ bucketId, files }: FileGridProps) {
+export function FileGrid({ bucketId, files, folders = [], currentPath = "" }: FileGridProps) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      {folders.map((folder) => {
+        const folderPath = currentPath ? `${currentPath}/${folder}` : folder;
+        return (
+          <Link key={`folder:${folder}`} href={`/buckets/${bucketId}?path=${encodeURIComponent(folderPath)}`}>
+            <div className="group flex h-40 flex-col overflow-hidden rounded-lg border border-border bg-surface hover:border-accent transition-colors">
+              <div className="relative h-24 w-full shrink-0 overflow-hidden rounded-t-[inherit] bg-surface-2">
+                <div className="flex h-full w-full items-center justify-center">
+                  <FileIcon mimeType="" isDirectory size={32} />
+                </div>
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col justify-center px-2 py-1.5">
+                <span className="truncate text-sm font-medium leading-tight">{folder}</span>
+                <span className="text-xs text-text-muted">Folder</span>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
       {files.map((file) => {
         const isImage = isImageType(file.mime_type);
         const isVideo = isVideoType(file.mime_type);

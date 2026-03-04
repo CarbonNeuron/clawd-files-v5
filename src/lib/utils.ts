@@ -15,6 +15,11 @@ export function formatExpiry(expiresAt: string): string {
   return `${hours}h remaining`;
 }
 
+/** Encode a file path for use in API URLs, preserving / separators. */
+export function encodeFilePath(filePath: string): string {
+  return filePath.split("/").map(encodeURIComponent).join("/");
+}
+
 export function isTextType(mimeType: string | undefined): boolean {
   if (!mimeType) return false;
   if (mimeType.startsWith("text/")) return true;
