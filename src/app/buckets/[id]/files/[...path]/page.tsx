@@ -308,7 +308,8 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
         {metadata.short_url && (
           <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-surface p-3">
             <code className="font-mono text-sm text-text-muted">
-              curl -L {baseUrl}{metadata.short_url} -o {metadata.name}
+              curl -L {baseUrl}
+              {metadata.short_url} -o {metadata.name}
             </code>
           </div>
         )}
