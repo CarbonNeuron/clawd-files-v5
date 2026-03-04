@@ -32,12 +32,33 @@ interface BucketDetailResponse {
   has_more_files: boolean;
 }
 
+interface DirectoryListingResponse {
+  files: BucketFile[];
+  folders: string[];
+  total_files: number;
+  total_folders: number;
+  limit: number;
+  offset: number;
+}
+
 async function fetchBucket(id: string): Promise<BucketDetailResponse | null> {
   const res = await fetch(`${process.env.API_URL}/api/buckets/${id}`, {
     next: { revalidate: 30 },
   });
   if (!res.ok) return null;
   return res.json() as Promise<BucketDetailResponse>;
+}
+
+async function fetchDirectoryListing(
+  id: string,
+  path: string,
+): Promise<DirectoryListingResponse | null> {
+  const params = new URLSearchParams({ path, limit: "200", sort: "name", order: "asc" });
+  const res = await fetch(`${process.env.API_URL}/api/buckets/${id}/ls?${params}`, {
+    next: { revalidate: 30 },
+  });
+  if (!res.ok) return null;
+  return res.json() as Promise<DirectoryListingResponse>;
 }
 
 export async function generateMetadata({
@@ -68,6 +89,8 @@ export default async function BucketPage({
 
   if (!bucket) notFound();
 
+  const listing = await fetchDirectoryListing(id, currentPath ?? "");
+
   const cookieStore = await cookies();
   const viewMode = cookieStore.get("cf-view-mode")?.value ?? "list";
 
@@ -88,14 +111,13 @@ export default async function BucketPage({
 
       <LiveFileList
         bucketId={bucket.id}
-        initialFiles={bucket.files}
-        hasMoreFiles={bucket.has_more_files}
-        fileCount={bucket.file_count}
+        files={listing?.files ?? []}
+        folders={listing?.folders ?? []}
         viewMode={viewMode === "grid" ? "grid" : "list"}
         currentPath={currentPath ?? ""}
       />
 
-      <ReadmeSection bucketId={bucket.id} files={bucket.files} />
+      <ReadmeSection bucketId={bucket.id} files={listing?.files ?? []} />
     </main>
   );
 }

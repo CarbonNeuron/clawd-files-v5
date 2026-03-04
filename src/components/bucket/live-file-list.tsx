@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useBucketEvents } from "@/hooks/use-bucket-events";
 import { FileList } from "./file-list";
 import { FileGrid } from "./file-grid";
@@ -20,32 +19,10 @@ interface FileEntry {
 
 interface LiveFileListProps {
   bucketId: string;
-  initialFiles: FileEntry[];
-  hasMoreFiles: boolean;
-  fileCount: number;
+  files: FileEntry[];
+  folders: string[];
   viewMode: "list" | "grid";
   currentPath: string;
-}
-
-function groupFilesAtPath(files: FileEntry[], currentPath: string) {
-  const prefix = currentPath ? currentPath + "/" : "";
-  const folderSet = new Set<string>();
-  const directFiles: FileEntry[] = [];
-
-  for (const file of files) {
-    if (prefix && !file.path.startsWith(prefix)) continue;
-
-    const relativePath = prefix ? file.path.slice(prefix.length) : file.path;
-    const slashIndex = relativePath.indexOf("/");
-
-    if (slashIndex === -1) {
-      directFiles.push(file);
-    } else {
-      folderSet.add(relativePath.slice(0, slashIndex));
-    }
-  }
-
-  return { folders: [...folderSet].sort(), directFiles };
 }
 
 function Breadcrumbs({ bucketId, currentPath }: { bucketId: string; currentPath: string }) {
@@ -79,53 +56,15 @@ function Breadcrumbs({ bucketId, currentPath }: { bucketId: string; currentPath:
   );
 }
 
-const PAGE_SIZE = 200;
-
-async function fetchAllFiles(bucketId: string, startOffset: number): Promise<FileEntry[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const allItems: FileEntry[] = [];
-  let offset = startOffset;
-
-  while (true) {
-    const res = await fetch(
-      `${apiUrl}/api/buckets/${bucketId}/files?limit=${PAGE_SIZE}&offset=${offset}&sort=path&order=asc`,
-    );
-    if (!res.ok) break;
-    const data = (await res.json()) as { items: FileEntry[]; total: number };
-    allItems.push(...data.items);
-    offset += data.items.length;
-    if (offset >= data.total || data.items.length === 0) break;
-  }
-
-  return allItems;
-}
-
 export function LiveFileList({
   bucketId,
-  initialFiles,
-  hasMoreFiles,
-  fileCount,
+  files,
+  folders,
   viewMode,
   currentPath,
 }: LiveFileListProps) {
-  const files = useBucketEvents(bucketId, initialFiles);
-  const [extraFiles, setExtraFiles] = useState<FileEntry[]>([]);
-  const [loading, setLoading] = useState(hasMoreFiles);
-  const fetchedRef = useRef(false);
-
-  // Auto-load remaining files on mount
-  useEffect(() => {
-    if (!hasMoreFiles || fetchedRef.current) return;
-    fetchedRef.current = true;
-
-    fetchAllFiles(bucketId, initialFiles.length).then((items) => {
-      setExtraFiles(items);
-      setLoading(false);
-    });
-  }, [bucketId, hasMoreFiles, initialFiles.length]);
-
-  const allFiles = [...files, ...extraFiles];
-  const { folders, directFiles } = groupFilesAtPath(allFiles, currentPath);
+  // SignalR hook for live updates — triggers router.refresh() to re-fetch /ls
+  useBucketEvents(bucketId, files);
 
   return (
     <div>
@@ -133,25 +72,17 @@ export function LiveFileList({
       {viewMode === "grid" ? (
         <FileGrid
           bucketId={bucketId}
-          files={directFiles}
+          files={files}
           folders={folders}
           currentPath={currentPath}
         />
       ) : (
         <FileList
           bucketId={bucketId}
-          files={directFiles}
+          files={files}
           folders={folders}
           currentPath={currentPath}
         />
-      )}
-      {loading && (
-        <div className="mt-4 flex justify-center">
-          <span className="inline-flex items-center gap-2 text-sm text-text-muted">
-            <Loader2 size={14} className="animate-spin" />
-            Loading files ({allFiles.length} of {fileCount})...
-          </span>
-        </div>
       )}
     </div>
   );
