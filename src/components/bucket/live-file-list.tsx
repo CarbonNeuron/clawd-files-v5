@@ -70,19 +70,9 @@ export function LiveFileList({
     <div>
       {currentPath && <Breadcrumbs bucketId={bucketId} currentPath={currentPath} />}
       {viewMode === "grid" ? (
-        <FileGrid
-          bucketId={bucketId}
-          files={files}
-          folders={folders}
-          currentPath={currentPath}
-        />
+        <FileGrid bucketId={bucketId} files={files} folders={folders} currentPath={currentPath} />
       ) : (
-        <FileList
-          bucketId={bucketId}
-          files={files}
-          folders={folders}
-          currentPath={currentPath}
-        />
+        <FileList bucketId={bucketId} files={files} folders={folders} currentPath={currentPath} />
       )}
     </div>
   );

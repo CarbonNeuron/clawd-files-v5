@@ -28,10 +28,15 @@ type PageParams = { id: string; path: string[] };
 
 /** Next.js may leave multi-byte percent-encoding intact in catch-all params. */
 function decodePath(segments: string[]): string {
-  return segments.map((s) => {
-    try { return decodeURIComponent(s); }
-    catch { return s; }
-  }).join("/");
+  return segments
+    .map((s) => {
+      try {
+        return decodeURIComponent(s);
+      } catch {
+        return s;
+      }
+    })
+    .join("/");
 }
 
 async function fetchFileMetadata(bucketId: string, filePath: string): Promise<FileMetadata | null> {
@@ -262,7 +267,11 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
       <FileEventListener bucketId={bucketId} filePath={filePath} />
       {/* Back link */}
       <Link
-        href={parentPath ? `/buckets/${bucketId}?path=${encodeURIComponent(parentPath)}` : `/buckets/${bucketId}`}
+        href={
+          parentPath
+            ? `/buckets/${bucketId}?path=${encodeURIComponent(parentPath)}`
+            : `/buckets/${bucketId}`
+        }
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors"
       >
         <ArrowLeft size={14} />
@@ -311,7 +320,7 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
         {metadata.short_url && (
           <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-surface p-3">
             <code className="font-mono text-sm text-text-muted">
-              curl -L {apiBase}{metadata.short_url} -o &quot;{metadata.name}&quot;
+              {`curl -L ${apiBase}${metadata.short_url} -o "${metadata.name}"`}
             </code>
           </div>
         )}

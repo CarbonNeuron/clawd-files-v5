@@ -18,13 +18,7 @@ interface VidstackPlayerProps {
 
 export default function VidstackPlayerInner({ src, title, type }: VidstackPlayerProps) {
   return (
-    <MediaPlayer
-      title={title}
-      src={src}
-      crossOrigin
-      playsInline
-      className="vidstack-player"
-    >
+    <MediaPlayer title={title} src={src} crossOrigin playsInline className="vidstack-player">
       <MediaProvider />
       {type === "video" ? (
         <DefaultVideoLayout icons={defaultLayoutIcons} />

@@ -91,10 +91,7 @@ function VideoThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry 
         onError={() => setFailed(true)}
       />
       <div className="absolute inset-0 flex items-center justify-center">
-        <Play
-          size={20}
-          className="rounded-full bg-black/60 p-1 text-white"
-        />
+        <Play size={20} className="rounded-full bg-black/60 p-1 text-white" />
       </div>
     </div>
   );
@@ -119,7 +116,10 @@ export function FileGrid({ bucketId, files, folders = [], currentPath = "" }: Fi
       {folders.map((folder) => {
         const folderPath = currentPath ? `${currentPath}/${folder}` : folder;
         return (
-          <Link key={`folder:${folder}`} href={`/buckets/${bucketId}?path=${encodeURIComponent(folderPath)}`}>
+          <Link
+            key={`folder:${folder}`}
+            href={`/buckets/${bucketId}?path=${encodeURIComponent(folderPath)}`}
+          >
             <div className="group flex h-40 flex-col overflow-hidden rounded-lg border border-border bg-surface hover:border-accent transition-colors">
               <div className="relative h-24 w-full shrink-0 overflow-hidden rounded-t-[inherit] bg-surface-2">
                 <div className="flex h-full w-full items-center justify-center">
