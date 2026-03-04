@@ -57,7 +57,7 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
         !imgSrc.startsWith("data:")
       ) {
         const resolved = resolvePath(imgSrc, basePath);
-        imgSrc = `/buckets/${bucketId}/files/${encodeURIComponent(resolved)}`;
+        imgSrc = `${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(resolved)}/content`;
       }
       // eslint-disable-next-line @next/next/no-img-element
       return <img src={imgSrc} alt={alt ?? ""} {...props} />;

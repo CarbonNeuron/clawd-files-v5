@@ -38,7 +38,7 @@ function isCodeOrText(mime: string, name: string) {
 
 function ImageThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry }) {
   const [failed, setFailed] = useState(false);
-  const src = `/buckets/${bucketId}/files/${encodeURIComponent(file.path)}`;
+  const src = `${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${bucketId}/files/${encodeURIComponent(file.path)}/content`;
 
   if (failed) {
     return (

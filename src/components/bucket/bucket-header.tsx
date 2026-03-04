@@ -43,7 +43,7 @@ export function BucketHeader({
           )}
         </div>
       </div>
-      <a href={`/buckets/${id}/zip`} download>
+      <a href={`${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${id}/zip`} download>
         <Button variant="primary">
           <Download size={16} />
           Download ZIP

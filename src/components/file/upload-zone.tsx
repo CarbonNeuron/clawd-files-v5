@@ -36,13 +36,15 @@ export function UploadZone({ bucketId, uploadToken, proxyUrl }: UploadZoneProps)
         if (proxyUrl) {
           return `${proxyUrl}/stream?filename=${encodedName}`;
         }
-        const base = `/api/buckets/${bucketId}/upload/stream?filename=${encodedName}`;
+        const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
+        const base = `${apiBase}/api/buckets/${bucketId}/upload/stream?filename=${encodedName}`;
         return uploadToken ? `${base}&token=${uploadToken}` : base;
       }
       if (proxyUrl) {
         return proxyUrl;
       }
-      const base = `/api/buckets/${bucketId}/upload`;
+      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
+      const base = `${apiBase}/api/buckets/${bucketId}/upload`;
       return uploadToken ? `${base}?token=${uploadToken}` : base;
     },
     [bucketId, uploadToken, proxyUrl],

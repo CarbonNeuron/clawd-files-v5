@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { FileIcon } from "@/components/file/file-icon";
 import { CodeBlock } from "@/components/file/code-block";
@@ -151,7 +150,8 @@ async function FilePreview({
   filePath: string;
   metadata: FileMetadata;
 }) {
-  const contentUrl = `/buckets/${bucketId}/files/${encodeURIComponent(filePath)}`;
+  const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const contentUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`;
   const mimeType = metadata.mime_type;
   const [type] = mimeType.split("/");
 
@@ -249,12 +249,8 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
     notFound();
   }
 
-  const downloadUrl = `/buckets/${bucketId}/files/${encodeURIComponent(filePath)}?download=true`;
-
-  const h = await headers();
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const host = h.get("host") ?? "localhost:3000";
-  const baseUrl = `${proto}://${host}`;
+  const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const downloadUrl = `${apiBase}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content?download=true`;
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">
@@ -283,11 +279,12 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
                 <>
                   <span className="text-border">|</span>
                   <a
-                    href={metadata.short_url}
+                    href={`${apiBase}${metadata.short_url}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-accent hover:underline"
                   >
+                    {apiBase}
                     {metadata.short_url}
                     <ExternalLink size={12} />
                   </a>
@@ -308,7 +305,7 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
         {metadata.short_url && (
           <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-surface p-3">
             <code className="font-mono text-sm text-text-muted">
-              curl -L {baseUrl}
+              curl -L {apiBase}
               {metadata.short_url} -o {metadata.name}
             </code>
           </div>
