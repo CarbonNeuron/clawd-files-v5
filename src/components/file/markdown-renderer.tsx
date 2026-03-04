@@ -26,8 +26,6 @@ function resolvePath(href: string, basePath: string): string {
 }
 
 export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownRendererProps) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
-
   const components: Components = {
     a: ({ href, children, ...props }) => {
       if (
@@ -68,7 +66,7 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
         !imgSrc.startsWith("data:")
       ) {
         const resolved = resolvePath(imgSrc, basePath);
-        imgSrc = `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(resolved)}/content`;
+        imgSrc = `/buckets/${bucketId}/files/${encodeURIComponent(resolved)}`;
       }
       // eslint-disable-next-line @next/next/no-img-element
       return <img src={imgSrc} alt={alt ?? ""} className="max-w-full rounded" {...props} />;
