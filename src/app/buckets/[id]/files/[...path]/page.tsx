@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { FileIcon } from "@/components/file/file-icon";
@@ -258,13 +259,13 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">
       {/* Back link */}
-      <a
+      <Link
         href={`/buckets/${bucketId}`}
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors"
       >
         <ArrowLeft size={14} />
         Back to bucket
-      </a>
+      </Link>
 
       {/* File metadata header */}
       <div className="mb-8">

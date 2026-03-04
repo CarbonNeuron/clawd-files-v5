@@ -4,6 +4,9 @@ const apiUrl = process.env.API_URL ?? "http://localhost:5239";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     remotePatterns: [{ protocol: "http", hostname: "localhost" }],
   },

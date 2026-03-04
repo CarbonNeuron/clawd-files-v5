@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
@@ -36,9 +37,9 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
       ) {
         const resolved = resolvePath(href, basePath);
         return (
-          <a href={`/buckets/${bucketId}/files/${resolved}`} {...props}>
+          <Link href={`/buckets/${bucketId}/files/${resolved}`} {...props}>
             {children}
-          </a>
+          </Link>
         );
       }
       return (
