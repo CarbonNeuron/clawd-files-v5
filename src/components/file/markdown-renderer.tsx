@@ -1,13 +1,50 @@
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeShiki from "@shikijs/rehype";
+import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
+import { createHighlighter } from "shiki";
 import type { Components } from "react-markdown";
 
 interface MarkdownRendererProps {
   content: string;
   bucketId: string;
   basePath?: string;
+}
+
+let highlighterInstance: Awaited<ReturnType<typeof createHighlighter>> | null = null;
+
+async function getHighlighter() {
+  if (!highlighterInstance) {
+    highlighterInstance = await createHighlighter({
+      themes: ["github-dark-default"],
+      langs: [
+        "typescript",
+        "javascript",
+        "json",
+        "python",
+        "bash",
+        "html",
+        "css",
+        "markdown",
+        "yaml",
+        "rust",
+        "go",
+        "java",
+        "csharp",
+        "cpp",
+        "c",
+        "ruby",
+        "sql",
+        "toml",
+        "xml",
+        "dockerfile",
+        "shellscript",
+        "tsx",
+        "jsx",
+      ],
+    });
+  }
+  return highlighterInstance;
 }
 
 function resolvePath(href: string, basePath: string): string {
@@ -27,7 +64,13 @@ function resolvePath(href: string, basePath: string): string {
   return parts.join("/");
 }
 
-export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownRendererProps) {
+export async function MarkdownRenderer({
+  content,
+  bucketId,
+  basePath = "",
+}: MarkdownRendererProps) {
+  const highlighter = await getHighlighter();
+
   const components: Components = {
     a: ({ href, children, ...props }) => {
       if (
@@ -68,10 +111,12 @@ export function MarkdownRenderer({ content, bucketId, basePath = "" }: MarkdownR
 
   return (
     <section className="rounded-lg border border-border bg-surface p-6">
-      <div className="prose prose-invert max-w-none text-sm leading-relaxed text-text [&_a]:text-link [&_a:hover]:underline [&_h1]:text-xl [&_h1]:font-bold [&_h1]:mt-6 [&_h1]:mb-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-3 [&_li]:mb-1 [&_code]:rounded [&_code]:bg-surface-2 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_pre]:rounded-lg [&_pre]:bg-surface-2 [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:mb-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-text-muted [&_blockquote]:mb-3 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-border [&_th]:bg-surface-2 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_td]:border [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_hr]:border-border [&_hr]:my-4 [&_img]:max-w-full [&_img]:rounded">
+      <div className="prose prose-invert max-w-none text-sm leading-relaxed text-text [&_a]:text-link [&_a:hover]:underline [&_h1]:text-xl [&_h1]:font-bold [&_h1]:mt-6 [&_h1]:mb-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-3 [&_li]:mb-1 [&_code]:rounded [&_code]:bg-surface-2 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:overflow-x-auto [&_pre]:mb-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-text-muted [&_blockquote]:mb-3 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-border [&_th]:bg-surface-2 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_td]:border [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_hr]:border-border [&_hr]:my-4 [&_img]:max-w-full [&_img]:rounded">
         <Markdown
           remarkPlugins={[remarkGfm]}
-          rehypePlugins={[[rehypeShiki, { theme: "github-dark-default" }]]}
+          rehypePlugins={[
+            [rehypeShikiFromHighlighter, highlighter, { theme: "github-dark-default" }],
+          ]}
           components={components}
         >
           {content}
