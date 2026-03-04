@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
@@ -7,7 +6,6 @@ import { FileIcon } from "@/components/file/file-icon";
 import { CodeBlock } from "@/components/file/code-block";
 import { MarkdownRenderer } from "@/components/file/markdown-renderer";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { formatBytes, isTextType } from "@/lib/utils";
 
 interface FileMetadata {
@@ -141,10 +139,6 @@ export async function generateMetadata({
     title: meta.name,
     description: `${formatBytes(meta.size)} - ${meta.mime_type}`,
   };
-}
-
-function FilePreviewSkeleton() {
-  return <Skeleton className="h-64 w-full rounded-lg" />;
 }
 
 async function FilePreview({
@@ -315,9 +309,7 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
       </div>
 
       {/* Preview section */}
-      <Suspense fallback={<FilePreviewSkeleton />}>
-        <FilePreview bucketId={bucketId} filePath={filePath} metadata={metadata} />
-      </Suspense>
+      <FilePreview bucketId={bucketId} filePath={filePath} metadata={metadata} />
     </main>
   );
 }

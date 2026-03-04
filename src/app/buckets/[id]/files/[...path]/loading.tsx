@@ -13,7 +13,16 @@ export default function FileDetailLoading() {
           </div>
         </div>
       </div>
-      <Skeleton className="h-64 w-full rounded-lg" />
+      <div className="space-y-3 rounded-lg border border-border bg-surface p-6">
+        <Skeleton className="h-6 w-48" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-2/3" />
+      </div>
     </main>
   );
 }
