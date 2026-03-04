@@ -20,8 +20,6 @@ export function BucketHeader({
   totalSize,
   expiresAt,
 }: BucketHeaderProps) {
-  const apiUrl = process.env.API_URL;
-
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="space-y-2">
@@ -45,7 +43,7 @@ export function BucketHeader({
           )}
         </div>
       </div>
-      <a href={`${apiUrl}/api/buckets/${id}/zip`} download>
+      <a href={`/buckets/${id}/zip`} download>
         <Button variant="primary">
           <Download size={16} />
           Download ZIP

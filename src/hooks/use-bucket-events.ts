@@ -22,10 +22,11 @@ export function useBucketEvents(bucketId: string, initialFiles: BucketFile[]) {
   }, [initialFiles]);
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    if (!apiUrl) return;
+    // Use relative URL — proxied through next.config.ts rewrites
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    if (!origin) return;
 
-    const hub = createFileHub(apiUrl);
+    const hub = createFileHub(origin);
 
     hub.on("FileCreated", (id: string, file: BucketFile) => {
       if (id === bucketId) setFiles((prev) => [...prev, file]);
@@ -37,10 +38,15 @@ export function useBucketEvents(bucketId: string, initialFiles: BucketFile[]) {
       if (id === bucketId) setFiles((prev) => prev.map((f) => (f.path === file.path ? file : f)));
     });
 
-    hub.start().then(() => hub.invoke("SubscribeToBucket", bucketId));
+    hub
+      .start()
+      .then(() => hub.invoke("SubscribeToBucket", bucketId))
+      .catch(() => {
+        // SignalR connection failed — fall back to static file list
+      });
 
     return () => {
-      hub.stop();
+      hub.stop().catch(() => {});
     };
   }, [bucketId]);
 

@@ -17,6 +17,10 @@
   --color-text-muted: #8b949e;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);

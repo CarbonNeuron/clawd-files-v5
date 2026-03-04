@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, Copy, ExternalLink } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { FileIcon } from "@/components/file/file-icon";
 import { CodeBlock } from "@/components/file/code-block";
 import { MarkdownRenderer } from "@/components/file/markdown-renderer";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatBytes, isTextType } from "@/lib/utils";
 
@@ -156,8 +155,7 @@ async function FilePreview({
   filePath: string;
   metadata: FileMetadata;
 }) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const contentUrl = `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content`;
+  const contentUrl = `/buckets/${bucketId}/files/${encodeURIComponent(filePath)}`;
   const mimeType = metadata.mime_type;
   const [type] = mimeType.split("/");
 
@@ -255,8 +253,7 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
     notFound();
   }
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const downloadUrl = `${apiUrl}/api/buckets/${bucketId}/files/${encodeURIComponent(filePath)}/content?download=true`;
+  const downloadUrl = `/buckets/${bucketId}/files/${encodeURIComponent(filePath)}?download=true`;
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">

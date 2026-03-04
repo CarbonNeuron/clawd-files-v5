@@ -29,27 +29,23 @@ export function UploadZone({ bucketId, uploadToken, proxyUrl }: UploadZoneProps)
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "";
-
   const getUploadUrl = useCallback(
     (file: File) => {
       if (file.size > STREAMING_THRESHOLD) {
-        // Streaming upload via PUT
         const encodedName = encodeURIComponent(file.name);
         if (proxyUrl) {
           return `${proxyUrl}/stream?filename=${encodedName}`;
         }
-        const base = `${apiBase}/api/buckets/${bucketId}/upload/stream?filename=${encodedName}`;
+        const base = `/api/buckets/${bucketId}/upload/stream?filename=${encodedName}`;
         return uploadToken ? `${base}&token=${uploadToken}` : base;
       }
-      // Multipart upload via POST
       if (proxyUrl) {
         return proxyUrl;
       }
-      const base = `${apiBase}/api/buckets/${bucketId}/upload`;
+      const base = `/api/buckets/${bucketId}/upload`;
       return uploadToken ? `${base}?token=${uploadToken}` : base;
     },
-    [apiBase, bucketId, uploadToken, proxyUrl],
+    [bucketId, uploadToken, proxyUrl],
   );
 
   const uploadFile = useCallback(
