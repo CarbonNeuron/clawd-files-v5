@@ -93,7 +93,7 @@ export async function MarkdownRenderer({
       );
     },
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-3">
+      <div className="themed-scrollbar overflow-x-auto mb-3">
         <table>{children}</table>
       </div>
     ),

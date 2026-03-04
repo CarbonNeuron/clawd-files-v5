@@ -48,26 +48,31 @@ body {
   }
 }
 
-/* Themed scrollbars for code blocks */
-pre {
+/* Themed scrollbars for code blocks and overflow containers */
+pre,
+.themed-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
 
-pre::-webkit-scrollbar {
+pre::-webkit-scrollbar,
+.themed-scrollbar::-webkit-scrollbar {
   height: 6px;
 }
 
-pre::-webkit-scrollbar-track {
+pre::-webkit-scrollbar-track,
+.themed-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-pre::-webkit-scrollbar-thumb {
+pre::-webkit-scrollbar-thumb,
+.themed-scrollbar::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 3px;
 }
 
-pre::-webkit-scrollbar-thumb:hover {
+pre::-webkit-scrollbar-thumb:hover,
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
 }
 
