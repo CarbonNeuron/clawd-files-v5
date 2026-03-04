@@ -62,14 +62,38 @@ function ImageThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry 
   );
 }
 
-function VideoThumbnail({ file }: { file: FileEntry }) {
+function VideoThumbnail({ bucketId, file }: { bucketId: string; file: FileEntry }) {
+  const [failed, setFailed] = useState(false);
+  const src = `${process.env.NEXT_PUBLIC_API_URL}/api/buckets/${bucketId}/files/${encodeFilePath(file.path)}/content`;
+
+  if (failed) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-surface-2">
+        <div className="relative">
+          <FileIcon mimeType={file.mime_type} size={28} />
+          <Play
+            size={14}
+            className="absolute -bottom-1 -right-2 rounded-full bg-bg p-0.5 text-purple-400"
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-full w-full items-center justify-center bg-surface-2">
-      <div className="relative">
-        <FileIcon mimeType={file.mime_type} size={28} />
+    <div className="relative h-full w-full">
+      <video
+        src={`${src}#t=0.1`}
+        preload="metadata"
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+        onError={() => setFailed(true)}
+      />
+      <div className="absolute inset-0 flex items-center justify-center">
         <Play
-          size={14}
-          className="absolute -bottom-1 -right-2 rounded-full bg-bg p-0.5 text-purple-400"
+          size={20}
+          className="rounded-full bg-black/60 p-1 text-white"
         />
       </div>
     </div>
@@ -122,7 +146,7 @@ export function FileGrid({ bucketId, files, folders = [], currentPath = "" }: Fi
                 {isImage ? (
                   <ImageThumbnail bucketId={bucketId} file={file} />
                 ) : isVideo ? (
-                  <VideoThumbnail file={file} />
+                  <VideoThumbnail bucketId={bucketId} file={file} />
                 ) : isCode ? (
                   <CodePreview file={file} />
                 ) : (
