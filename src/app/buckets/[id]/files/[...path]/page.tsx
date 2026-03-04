@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { FileIcon } from "@/components/file/file-icon";
 import { CodeBlock } from "@/components/file/code-block";
@@ -250,6 +251,11 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
 
   const downloadUrl = `/buckets/${bucketId}/files/${encodeURIComponent(filePath)}?download=true`;
 
+  const h = await headers();
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const host = h.get("host") ?? "localhost:3000";
+  const baseUrl = `${proto}://${host}`;
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">
       {/* Back link */}
@@ -302,7 +308,7 @@ export default async function FileDetailPage({ params }: { params: Promise<PageP
         {metadata.short_url && (
           <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-surface p-3">
             <code className="font-mono text-sm text-text-muted">
-              curl -L {metadata.short_url} -o {metadata.name}
+              curl -L {baseUrl}{metadata.short_url} -o {metadata.name}
             </code>
           </div>
         )}
