@@ -6,6 +6,7 @@ import { FileIcon } from "@/components/file/file-icon";
 import { CodeBlock } from "@/components/file/code-block";
 import { MarkdownRenderer } from "@/components/file/markdown-renderer";
 import { FileEventListener } from "@/components/file/file-event-listener";
+import { VidstackPlayer } from "@/components/file/media-player";
 import { Badge } from "@/components/ui/badge";
 import { encodeFilePath, formatBytes, isTextType } from "@/lib/utils";
 
@@ -200,10 +201,7 @@ async function FilePreview({
   if (type === "video") {
     return (
       <div className="overflow-hidden rounded-lg border border-border bg-surface">
-        <video controls className="w-full" preload="metadata">
-          <source src={contentUrl} type={mimeType} />
-          Your browser does not support the video element.
-        </video>
+        <VidstackPlayer src={contentUrl} title={metadata.name} type="video" />
       </div>
     );
   }
@@ -212,10 +210,7 @@ async function FilePreview({
   if (type === "audio") {
     return (
       <div className="rounded-lg border border-border bg-surface p-6">
-        <audio controls className="w-full" preload="metadata">
-          <source src={contentUrl} type={mimeType} />
-          Your browser does not support the audio element.
-        </audio>
+        <VidstackPlayer src={contentUrl} title={metadata.name} type="audio" />
       </div>
     );
   }

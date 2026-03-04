@@ -76,6 +76,13 @@ pre::-webkit-scrollbar-thumb:hover,
   background: var(--color-text-muted);
 }
 
+/* Vidstack player theme */
+.vidstack-player {
+  --media-brand: var(--color-accent);
+  --media-focus-ring-color: var(--color-accent);
+  --media-font-family: var(--font-mono);
+}
+
 .light {
   --color-bg: #ffffff;
   --color-surface: #f6f8fa;
