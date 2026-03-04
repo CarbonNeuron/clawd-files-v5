@@ -26,6 +26,28 @@ body {
   color: var(--color-text);
 }
 
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
+  background: var(--color-accent);
+  animation: nav-progress 12s cubic-bezier(0.1, 0.5, 0.1, 1) forwards;
+}
+
+@keyframes nav-progress {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(0.95);
+    transform-origin: left;
+  }
+}
+
 .light {
   --color-bg: #ffffff;
   --color-surface: #f6f8fa;

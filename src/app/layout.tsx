@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { cookies } from "next/headers";
+import { NavigationProgress } from "@/components/ui/navigation-progress";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
@@ -21,7 +23,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang="en"
       className={`${inter.variable} ${jetbrains.variable} ${spaceGrotesk.variable}${theme === "light" ? " light" : ""}`}
     >
-      <body className="font-body bg-bg text-text antialiased">{children}</body>
+      <body className="font-body bg-bg text-text antialiased">
+        <Suspense>
+          <NavigationProgress />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }
