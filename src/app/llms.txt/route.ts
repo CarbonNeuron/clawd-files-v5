@@ -3,7 +3,13 @@ import { NextResponse } from "next/server";
 const content = `# CarbonFiles Dashboard
 
 > Official web UI for CarbonFiles — the file-sharing platform with bucket-based organization.
-> For the complete API reference, see the carbon-files repo: https://github.com/carbungo/carbon-files/blob/main/llms.txt
+> For the complete API reference and CLI docs, see: https://github.com/carbungo/carbon-files/blob/main/llms.txt
+
+## For AI Agents
+
+Prefer the \`cf\` CLI over raw curl for most operations (install: \`dotnet tool install -g CarbonFiles.Cli\`).
+The dashboard is a human-facing UI — use it for shareable links and file previews, not for scripting.
+To generate a dashboard login URL from the CLI: \`cf token create dashboard\`
 
 ## What This Is
 
@@ -29,7 +35,9 @@ The API backend is the source of truth for all operations. This dashboard is a c
 
 ## Authentication Flow
 
-1. An admin creates a dashboard token: \`POST /api/tokens/dashboard\` on the CarbonFiles API
+1. An admin generates a dashboard token:
+   - CLI: \`cf token create dashboard\`
+   - API: \`POST /api/tokens/dashboard\` on the CarbonFiles API
 2. User visits \`https://{dashboard}/?token={jwt}\`
 3. Dashboard calls \`/auth/set-token\` which validates the JWT against the API (\`GET /api/tokens/dashboard/me\`)
 4. On success, sets an HTTP-only cookie \`cf-auth-token={jwt}\`
