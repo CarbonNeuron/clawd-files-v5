@@ -24,11 +24,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <StatsCard icon={FolderOpen} label="Buckets" value={stats.total_buckets} />
         <StatsCard icon={FileText} label="Files" value={stats.total_files} />
-        <StatsCard
-          icon={HardDrive}
-          label="Storage"
-          value={formatBytes(stats.total_size)}
-        />
+        <StatsCard icon={HardDrive} label="Storage" value={formatBytes(stats.total_size)} />
         <StatsCard icon={Key} label="API Keys" value={stats.total_keys} />
         <StatsCard icon={Download} label="Downloads" value={stats.total_downloads} />
       </div>

@@ -69,9 +69,7 @@ export default async function BucketsPage({ searchParams }: BucketsPageProps) {
                     <TableCell className="hidden text-text-muted sm:table-cell">
                       {bucket.owner}
                     </TableCell>
-                    <TableCell className="text-text-muted">
-                      {bucket.file_count}
-                    </TableCell>
+                    <TableCell className="text-text-muted">{bucket.file_count}</TableCell>
                     <TableCell className="text-text-muted">
                       {formatBytes(bucket.total_size)}
                     </TableCell>

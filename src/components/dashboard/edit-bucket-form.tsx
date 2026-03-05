@@ -15,7 +15,12 @@ interface EditBucketFormProps {
   initialDescription: string;
 }
 
-export function EditBucketForm({ token, bucketId, initialName, initialDescription }: EditBucketFormProps) {
+export function EditBucketForm({
+  token,
+  bucketId,
+  initialName,
+  initialDescription,
+}: EditBucketFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
@@ -33,7 +38,8 @@ export function EditBucketForm({ token, bucketId, initialName, initialDescriptio
     try {
       await createApiClient(token).buckets[bucketId]!.update({
         name: name.trim() !== initialName ? name.trim() : undefined,
-        description: description.trim() !== initialDescription ? (description.trim() || undefined) : undefined,
+        description:
+          description.trim() !== initialDescription ? description.trim() || undefined : undefined,
         expires_in: expiresIn.trim() || undefined,
       });
       setSuccess(true);

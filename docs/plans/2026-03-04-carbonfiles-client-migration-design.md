@@ -20,10 +20,12 @@ Replace generated API client (`@hey-api/openapi-ts`) with the handcrafted `@carb
 ## Changes
 
 ### Create/Rewrite
+
 - `src/lib/api/server.ts` — CarbonFilesClient from cookies
 - `src/lib/api/client.ts` — re-exports + createApiClient helper
 
 ### Update Server Pages
+
 - `src/app/dashboard/page.tsx` — `client.stats.get()`
 - `src/app/dashboard/stats/page.tsx` — `client.stats.get()`
 - `src/app/dashboard/keys/page.tsx` — `client.keys.list()`, pass token
@@ -33,6 +35,7 @@ Replace generated API client (`@hey-api/openapi-ts`) with the handcrafted `@carb
 - `src/app/buckets/[id]/files/[...path]/page.tsx` — public client for metadata
 
 ### Update Client Components (receive token prop, call API directly)
+
 - `src/components/dashboard/create-bucket-form.tsx`
 - `src/components/dashboard/edit-bucket-form.tsx`
 - `src/components/dashboard/create-key-form.tsx`
@@ -41,10 +44,12 @@ Replace generated API client (`@hey-api/openapi-ts`) with the handcrafted `@carb
 - `src/components/file/upload-zone.tsx`
 
 ### Update Types Only
+
 - `src/hooks/use-bucket-events.ts` — import BucketFile from @carbonfiles/client
 - `src/app/auth/set-token/route.ts` — use client for token validation
 
 ### Delete
+
 - `src/lib/api/generated/` (entire directory)
 - `openapi-ts.config.ts`
 - `src/app/dashboard/buckets/create/route.ts`
@@ -55,5 +60,6 @@ Replace generated API client (`@hey-api/openapi-ts`) with the handcrafted `@carb
 - `src/app/dashboard/keys/[prefix]/delete/route.ts`
 
 ### Cleanup
+
 - Remove `@hey-api/openapi-ts` from devDependencies
 - Remove `generate-api` script from package.json

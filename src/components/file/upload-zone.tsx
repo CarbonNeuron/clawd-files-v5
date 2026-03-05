@@ -41,15 +41,14 @@ export function UploadZone({ bucketId, uploadToken, token }: UploadZoneProps) {
       );
 
       const client = createApiClient(token);
-      client.buckets[bucketId]!.files
-        .upload(tracked.file, tracked.file.name, {
-          onProgress: (p) => {
-            const progress = p.percentage != null ? Math.round(p.percentage) : 0;
-            setFiles((prev) => prev.map((f) => (f.id === tracked.id ? { ...f, progress } : f)));
-          },
-          uploadToken,
-          signal: controller.signal,
-        })
+      client.buckets[bucketId]!.files.upload(tracked.file, tracked.file.name, {
+        onProgress: (p) => {
+          const progress = p.percentage != null ? Math.round(p.percentage) : 0;
+          setFiles((prev) => prev.map((f) => (f.id === tracked.id ? { ...f, progress } : f)));
+        },
+        uploadToken,
+        signal: controller.signal,
+      })
         .then(() => {
           setFiles((prev) =>
             prev.map((f) =>

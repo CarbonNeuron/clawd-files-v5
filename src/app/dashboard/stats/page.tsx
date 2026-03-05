@@ -32,23 +32,11 @@ export default async function StatsPage() {
       <h1 className="mb-6 text-2xl font-bold">System Statistics</h1>
 
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <StatsCard
-          icon={FolderOpen}
-          label="Total Buckets"
-          value={stats.total_buckets}
-        />
+        <StatsCard icon={FolderOpen} label="Total Buckets" value={stats.total_buckets} />
         <StatsCard icon={FileText} label="Total Files" value={stats.total_files} />
-        <StatsCard
-          icon={HardDrive}
-          label="Total Storage"
-          value={formatBytes(stats.total_size)}
-        />
+        <StatsCard icon={HardDrive} label="Total Storage" value={formatBytes(stats.total_size)} />
         <StatsCard icon={Key} label="Total API Keys" value={stats.total_keys} />
-        <StatsCard
-          icon={Download}
-          label="Total Downloads"
-          value={stats.total_downloads}
-        />
+        <StatsCard icon={Download} label="Total Downloads" value={stats.total_downloads} />
       </div>
 
       <Card>
@@ -69,13 +57,9 @@ export default async function StatsPage() {
               {stats.storage_by_owner.map((owner) => (
                 <TableRow key={owner.owner}>
                   <TableCell className="font-medium">{owner.owner}</TableCell>
-                  <TableCell className="text-text-muted">
-                    {owner.bucket_count}
-                  </TableCell>
+                  <TableCell className="text-text-muted">{owner.bucket_count}</TableCell>
                   <TableCell className="text-text-muted">{owner.file_count}</TableCell>
-                  <TableCell className="text-text-muted">
-                    {formatBytes(owner.total_size)}
-                  </TableCell>
+                  <TableCell className="text-text-muted">{formatBytes(owner.total_size)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
