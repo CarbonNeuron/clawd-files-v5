@@ -38,7 +38,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: repo
-        run: echo "name=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "name=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          echo "sha_short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
       - uses: docker/build-push-action@v5
         with:
           context: .
@@ -46,5 +48,8 @@ jobs:
           tags: |
             ghcr.io/${{ steps.repo.outputs.name }}:latest
             ghcr.io/${{ steps.repo.outputs.name }}:${{ github.sha }}
+          build-args: |
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_COMMIT_SHORT=${{ steps.repo.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

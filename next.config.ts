@@ -15,8 +15,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "http", hostname: "localhost" }],
   },
   env: {
-    BUILD_COMMIT: git("rev-parse HEAD"),
-    BUILD_COMMIT_SHORT: git("rev-parse --short HEAD"),
+    BUILD_COMMIT: process.env.BUILD_COMMIT || git("rev-parse HEAD"),
+    BUILD_COMMIT_SHORT: process.env.BUILD_COMMIT_SHORT || git("rev-parse --short HEAD"),
     BUILD_TIME: new Date().toISOString(),
   },
 };
